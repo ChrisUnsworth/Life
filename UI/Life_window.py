@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QPainter, QPen, QPolygon, QBrush
 from PyQt5.QtCore import Qt, QTimer, QPoint
 
-from state.LifeState import LifeState, blank_state, random_state
+from state.Factory import blank_state, random_state
+from state.LifeState import LifeState
 
 
 class LifeWindow(QMainWindow):
@@ -49,18 +50,17 @@ class LifeWindow(QMainWindow):
     def paint_game_box(self):
         live = QBrush(Qt.green, Qt.DiagCrossPattern)
         dead = QBrush(Qt.red, Qt.DiagCrossPattern)
-        gap = 500 / self.state.size
+        gap = 500 / self.state.size()
         painter = QPainter(self)
-        for x in range(self.state.size):
-            for y in range(self.state.size):
+        for x in range(self.state.size()):
+            for y in range(self.state.size()):
                 val = self.state.value(x, y)
                 painter.fillRect(49 + gap * x, 49 + gap * y, gap, gap, live if val == 1 else dead)
 
         painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
-        # painter.setBrush(QBrush(Qt.green, Qt.DiagCrossPattern))
         painter.drawRect(48, 48, 502, 502)
         painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        for i in range(1, self.state.size):
+        for i in range(1, self.state.size()):
             painter.drawLine(48, 48 + gap * i, 550, 48 + gap * i)
             painter.drawLine(48 + gap * i, 48, 48 + gap * i, 550)
 
